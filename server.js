@@ -5,18 +5,21 @@ const { connectDB } = require('./config/database');
 const authorsRoutes = require('./routes/authors');
 const booksRoutes = require('./routes/books');
 const reviewsRoutes = require('./routes/reviews');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
+app.use('/api/auth', authRoutes);
 app.use('/api/autores', authorsRoutes);
 app.use('/api/livros', booksRoutes);
 app.use('/api/avaliacoes', reviewsRoutes);
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.json({
     mensagem: 'API Gestor de Livros e Avaliações',
     versao: '1.0.0',

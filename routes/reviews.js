@@ -5,23 +5,32 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
-    const { livroId, nomeUtilizador, pontuacao, comentario } = req.body;
+    // Support both frontend field names and original field names
+    const { 
+      livroId, livro_id = livroId,
+      nomeUtilizador, reviewer = nomeUtilizador,
+      pontuacao, 
+      comentario 
+    } = req.body;
     
-    if (!livroId || !nomeUtilizador || !pontuacao) {
+    const finalLivroId = livro_id || livroId;
+    const finalNomeUtilizador = reviewer || nomeUtilizador;
+    
+    if (!finalLivroId || !finalNomeUtilizador || !pontuacao) {
       return res.status(400).json({ 
         erro: 'Livro, nome do utilizador e pontuação são obrigatórios' 
       });
     }
 
-    const bookExists = await Book.exists(livroId);
+    const bookExists = await Book.exists(finalLivroId);
     if (!bookExists) {
       return res.status(400).json({ erro: 'Livro não encontrado' });
     }
 
     const review = await Review.create({
-      livroId,
-      nomeUtilizador,
-      pontuacao,
+      livroId: finalLivroId,
+      nomeUtilizador: finalNomeUtilizador,
+      pontuacao: parseInt(pontuacao),
       comentario
     });
 

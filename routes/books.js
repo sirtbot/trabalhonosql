@@ -5,26 +5,39 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
-    const { titulo, autorId, genero, anoPublicacao, isbn, resumo, palavrasChave } = req.body;
+    // Support both frontend field names and original field names
+    const { 
+      titulo, 
+      autorId, autor_id = autorId,
+      genero, 
+      anoPublicacao, ano_publicacao = anoPublicacao,
+      isbn, 
+      resumo, descricao = resumo,
+      palavrasChave 
+    } = req.body;
     
-    if (!titulo || !autorId || !genero) {
+    const finalAutorId = autor_id || autorId;
+    const finalAnoPublicacao = ano_publicacao || anoPublicacao;
+    const finalResumo = descricao || resumo;
+    
+    if (!titulo || !finalAutorId || !genero) {
       return res.status(400).json({ 
         erro: 'Título, autor e género são obrigatórios' 
       });
     }
 
-    const authorExists = await Author.exists(autorId);
+    const authorExists = await Author.exists(finalAutorId);
     if (!authorExists) {
       return res.status(400).json({ erro: 'Autor não encontrado' });
     }
 
     const book = await Book.create({
       titulo,
-      autorId,
+      autorId: finalAutorId,
       genero,
-      anoPublicacao,
+      anoPublicacao: finalAnoPublicacao,
       isbn,
-      resumo,
+      resumo: finalResumo,
       palavrasChave
     });
 
@@ -146,6 +159,35 @@ router.delete('/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ 
       erro: 'Erro ao remover livro', 
+      detalhes: error.message 
+    });
+  }
+});
+
+// NEW FEATURE 1: Book Statistics and Analytics
+router.get('/statistics/overview', async (req, res) => {
+  try {
+    const stats = await Book.getStatistics();
+    res.json(stats);
+  } catch (error) {
+    res.status(500).json({ 
+      erro: 'Erro ao buscar estatísticas', 
+      detalhes: error.message 
+    });
+  }
+});
+
+// NEW FEATURE 2: Advanced Recommendations
+router.get('/recommendations/:bookId', async (req, res) => {
+  try {
+    const { bookId } = req.params;
+    const { limit = 5 } = req.query;
+    
+    const recommendations = await Book.getRecommendations(bookId, parseInt(limit));
+    res.json(recommendations);
+  } catch (error) {
+    res.status(500).json({ 
+      erro: 'Erro ao buscar recomendações', 
       detalhes: error.message 
     });
   }

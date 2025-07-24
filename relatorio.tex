@@ -1,0 +1,84 @@
+% Relatório do Projeto Node.js
+\documentclass[12pt,a4paper]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+
+\title{Relatório do Projeto Node.js}
+\author{Seu Nome}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Este relatório apresenta a estrutura, funcionamento e principais características do projeto Node.js desenvolvido para fins de estudo e demonstração de integração com banco de dados, autenticação e manipulação de dados via API REST.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introdução}
+O projeto consiste em uma aplicação Node.js que implementa uma API REST para gerenciamento de autores, livros, resenhas e usuários. O objetivo é demonstrar conceitos de backend, autenticação, persistência de dados e organização de código.
+
+\section{Estrutura do Projeto}
+A estrutura de pastas do projeto é a seguinte:
+
+\begin{verbatim}
+config/
+  database.js
+middleware/
+  auth.js
+models/
+  Author.js
+  Book.js
+  Review.js
+  User.js
+public/
+  app.js
+  index.html
+routes/
+  auth.js
+  authors.js
+  books.js
+  reviews.js
+server.js
+package.json
+README.md
+\end{verbatim}
+
+\section{Descrição dos Principais Arquivos e Pastas}
+\begin{itemize}
+  \item \textbf{config/database.js}: Configuração da conexão com o banco de dados.
+  \item \textbf{middleware/auth.js}: Middleware para autenticação de usuários.
+  \item \textbf{models/}: Modelos Mongoose para as entidades Author, Book, Review e User.
+  \item \textbf{public/}: Arquivos públicos, incluindo frontend simples (HTML/JS).
+  \item \textbf{routes/}: Rotas da API para autenticação, autores, livros e resenhas.
+  \item \textbf{server.js}: Arquivo principal que inicializa o servidor Express.
+  \item \textbf{package.json}: Gerenciamento de dependências e scripts do projeto.
+\end{itemize}
+
+\section{Tecnologias Utilizadas}
+\begin{itemize}
+  \item Node.js
+  \item Express.js
+  \item MongoDB (via Mongoose)
+  \item JWT para autenticação
+  \item HTML/CSS/JS para frontend básico
+\end{itemize}
+
+\section{Como Executar}
+\begin{enumerate}
+  \item Instale as dependências: \\ \texttt{npm install}
+  \item Configure o banco de dados em \texttt{config/database.js} e variáveis de ambiente.
+  \item Inicie o servidor: \\ \texttt{npm start} ou \texttt{node server.js}
+  \item Acesse a aplicação via navegador ou ferramentas como Postman.
+\end{enumerate}
+
+\section{Considerações Finais}
+O projeto serve como base para aplicações Node.js com autenticação, persistência de dados e organização modular. Pode ser expandido para incluir mais funcionalidades, testes automatizados e interface de usuário aprimorada.
+
+\end{document} 
